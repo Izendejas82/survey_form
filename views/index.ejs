@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Home Page</title>
+  </head>
+    <title>docs</title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        <script type ="text/javascript" src="/socket.io/socket.io.js"></script>
+        <script type ="text/javascript">
+            $(document).ready(function (){
+
+                var socket = io.connect();
+
+                $('form').submit(function(e) {
+            		e.preventDefault();
+    				socket.emit("posting_form", {
+    				  	name: $('#name').val(),
+                        first: $('#first_name').val(),
+                        last: $('#last_name').val(),
+                        language: $('#language').val(),
+                        comment: $('#comment').val(),
+                        location: $('#location').val(),
+
+                    });
+    			});
+            	//display the emit response of the server called "updated_message" and "random_number"
+    			socket.on('updated_message', function (data){
+    			    $('#message').html("You emitted the following information to the server: " + JSON.stringify(data.response));
+    			});
+    			socket.on('random_number', function (data){
+    			   $('#number').html("Your lucky number emitted by the server is : " + JSON.stringify(data.response));
+    			});
+            });
+        </script>
+
+
+
+    <body>
+    <form>
+      <div id ="Information"></div>
+
+          <div id="first_name"> First Name:<br>
+            <input type="text" name="first_name">
+          </div>
+          <div id="last_name">Last Name:<br>
+            <input type="text" name="last_name">
+          </div>
+        <br>
+          <div id="location">
+           Dojo Location:
+              <select class="location">
+                <option value="Burbank">Los Angeles</option>
+                <option value="Costa Mesa">Orange County</option>
+                <option value="Chicago">Chicago</option>
+                <option value="McLean">Washington D.C</option>
+                <option value="Dallas">Dallas</option>
+                <option value="Bellevue">Seattle</option>
+                <option value="meryville">Berkeley</option>
+                <option value="San Jose">Silicon Valley</option>
+              </select>
+          </div>
+        <br>
+          <div>
+            Favorite Language:
+              <select id="language">
+                <h1><option>JavaScript</option></h1>
+                <hi><option>Python</option></h1>
+                <h1><option>Java</option></h1>
+              </select>
+          </div>
+          <br>
+          <p>Comment (optional):</p>
+          <div id ="Comment_Box">
+            <textarea rows="4" cols="50" name="comment" placeholder="Tell us about your self?"></textarea>
+          </div>
+          <br>
+          <div id ="Submit_Button">
+            <input type="submit" value="Submit Button">
+          </div>
+        </form>
+  </body>
+</html>
